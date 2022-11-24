@@ -194,6 +194,10 @@ class EDH(object):
         return acc_s, acc_t
 
     def test(self, set_name='T'):
+        # For the EDH dataset, there are training, validation, and test set,
+        # but we only utilized training dataset to train the model.
+        # We did not use the validation set to early-stop training nor fine-tune the model.
+        # Therefore, we can test the performance on the combination of validation set and test set.
         self.eval_model()
         correct_val, size_val = self.calc_correct_and_size(
             self.data_val, set_name=set_name)
@@ -256,6 +260,7 @@ class EDH(object):
         data_target = load_target_data(leave_one_num=self.leave_one_num,
                                        dataset=self.args.dataset,
                                        sensor_num=self.args.sensor_num)
+        # We only use the training set to train the network and thus we only need to save the pseduo label of target training dataset.
         x_name_list = ['x_t_train']
         y_name_list = ['y_pseudo_t_train']
         for i in range(len(x_name_list)):
@@ -321,6 +326,8 @@ class EDHKD(EDH):
         return acc_s, acc_t
 
     def test(self):
+        # The test function of EHDKD is different from EDH because we concatenated
+        # the validation and test set into the same array fot the EHDKD evaluation.
         self.eval_model()
         correct, size = self.calc_correct_and_size(self.data_test)
         return float(correct) / float(size)
@@ -328,9 +335,13 @@ class EDHKD(EDH):
     def calc_correct_and_size(self, data_loader):
         correct = 0.0
         size = 0.0
+        # The data loader of EDHKD is different from EDH because the EDHKD data loader only
+        # contains the target data and the target labels (pseudo labels). There is no source data.
+        # Therefore, a batch of the EDHKD data_loader only has img and label tensors.
         for _, (img, label) in enumerate(data_loader):
             img, label = Variable(img.to(device)), Variable(
                 label.long().to(device))
+            # For EDHKD, the length of output_list is 1 because there is only one classifier
             _, output_list = self.calc_output_list(img=img)
             output_vec = torch.stack(output_list)
             pred_ensemble = output_vec.data.max(dim=-1)[1]
