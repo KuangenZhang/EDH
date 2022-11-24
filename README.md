@@ -2,7 +2,7 @@
 
 <img src='./overview.png' width=800>
 
-This is the implementation of Unsupervised Cross-subject Adaptation for Predicting Human Locomotion Intent in Pytorch.
+This is the implementation of Ensemble diverse hypotheses and knowledge distillation for unsupervised cross-subject adaptation in Pytorch.
 
 ## Getting Started
 ### Installation
