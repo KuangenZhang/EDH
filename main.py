@@ -66,19 +66,22 @@ def process(args):
         model_name), np.mean(acc_t))
 
 
-def main(args):
+def train(args):
     '''Train the teacher network'''
     process(args)
     ''' Save knowledge distillation datasets '''
     sub_num_dict = {'ENABL3S': 10, 'DSADS': 8}
     sub_num = sub_num_dict[args.dataset]
-    # for i in range(sub_num):
-    for i in [0]:
+    for i in range(sub_num):
         save_kd_dataset(args, leave_one_num=i)
     ''' Knowledge distillation: Change the method name to method_name + KD'''
     if not ('KD' in args.method_name):
         args.method_name = f'{args.method_name}KD'
         process(args)
+
+
+def test(args):
+    process(args)
 
 
 if __name__ == '__main__':
@@ -94,9 +97,9 @@ if __name__ == '__main__':
                         help='input batch size for training (default: 64)')
     parser.add_argument('--checkpoint_dir', type=str, default=r'checkpoint', metavar='N',
                         help='checkpoint directory')
-    parser.add_argument('--method_name', default='EDH',
+    parser.add_argument('--method_name', default='EDHKD',
                         help='check the method name')
-    parser.add_argument('--eval_only', default=False,
+    parser.add_argument('--eval_only', default=True,
                         help='evaluation only option')
     parser.add_argument('--lr', type=float, default=2e-4, metavar='LR',
                         help='learning rate (default: 0.0002)')
@@ -123,5 +126,8 @@ if __name__ == '__main__':
         torch.manual_seed(args.seed)
     for dataset_name in ['ENABL3S', 'DSADS']:
         args.dataset = dataset_name
-        args.method_name = 'EDH'
-        main(args)
+        if args.eval_only:
+            test(args)
+        else:
+            args.method_name = 'EDH'
+            train(args)

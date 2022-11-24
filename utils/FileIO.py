@@ -5,15 +5,12 @@ Created on Sat May 18 10:30:35 2019
 
 @author: kuangen
 """
-from numpy import genfromtxt
-import numpy as np
-from sklearn.model_selection import train_test_split
-from sklearn import preprocessing
-import mat4py as m4p
-from random import shuffle
-import pandas as pd
 import copy
-import glob
+from random import shuffle
+
+import mat4py as m4p
+import numpy as np
+from sklearn import preprocessing
 
 
 def load_DSADS_mat(data_path='data/1_dataset_UCI_DSADS/Raw/', X_dim=4,
