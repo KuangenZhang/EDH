@@ -61,7 +61,7 @@ If you find our work useful in your research, please consider citing:
 ```
 
 ## Acknowledgement
-We acknowledge that we borrow the code from [MCD_DA](https://github.com/mil-tokyo/MCD_DA) heavily. 
+We acknowledge that we borrow a part of code from [MCD_DA](https://github.com/mil-tokyo/MCD_DA). 
 
 ## Reference
 *  K. Saito, K. Watanabe, Y. Ushiku, and T. Harada, “Maximum classifier
